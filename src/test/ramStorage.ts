@@ -3,8 +3,8 @@ import { CustomFileCpu } from "@wxn0brp/db";
 const temp = new Map<string, any[]>();
 
 async function _read(file: string) {
-    if (temp.has(file)) return temp.get(file);
-    return []
+    if (temp.has(file)) return temp.get(file) || [];
+    return [];
 }
 
 async function _write(file: string, data: any[]) {

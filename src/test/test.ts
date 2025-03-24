@@ -1,4 +1,4 @@
-import GateWarden from "..";
+import { GateWarden, UserManager } from "..";
 import sourceMapSupport from "source-map-support";
 import { DataBase as Valthera } from "@wxn0brp/db";
 import fCPU from "./ramStorage";
@@ -39,3 +39,7 @@ log(await gw.hasAccess("alice", "doc999", PermissionFlags.EDIT), false);
 log(await gw.hasAccess("bob", "doc123", PermissionFlags.DELETE), true);
 log(await gw.hasAccess("charlie", "doc123", PermissionFlags.DELETE)), true;
 log(await gw.hasAccess("alice", "doc123", PermissionFlags.DELETE), false);
+
+const userManager = new UserManager<UserAttributes>(db);
+await userManager.updateAttributes("bob", { level: 1 });
+log(await gw.hasAccess("bob", "doc123", PermissionFlags.DELETE), false);
