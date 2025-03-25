@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Browser</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="panel">
+        <h1>Data Browser</h1>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-button" :class="{ active: activeTab === 'roles' }" @click="setActiveTab('roles')">Roles</button>
+            <button class="tab-button" :class="{ active: activeTab === 'users' }" @click="setActiveTab('users')">Users</button>
+            <button class="tab-button" :class="{ active: activeTab === 'acl' }" @click="setActiveTab('acl')">ACL Rules</button>
+        </div>
+
+        <!-- Roles Tab -->
+        <div v-if="activeTab === 'roles'" class="tab-content active">
+            <h2>Roles</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Permission Level (p)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="role in roles" :key="role.id">
+                        <td>{{ role.id }}</td>
+                        <td>{{ role.p }}</td>
+                        <td>
+                            <button class="action edit" @click="editRole(role)">Edit</button>
+                            <button class="action delete" @click="deleteRole(role.id)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button @click="showAddRoleForm = true">Add Role</button>
+            <div v-if="showAddRoleForm" class="form-group">
+                <label for="new-role-id">ID</label>
+                <input id="new-role-id" v-model="newRole.id">
+                <label for="new-role-p">Permission Level (p)</label>
+                <input type="number" id="new-role-p" v-model="newRole.p">
+                <button @click="addRole">Save</button>
+                <button @click="showAddRoleForm = false">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Users Tab -->
+        <div v-if="activeTab === 'users'" class="tab-content active">
+            <h2>Users</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Roles</th>
+                        <th>Attributes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="user in users" :key="user.id">
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.roles.join(', ') }}</td>
+                        <td>{{ JSON.stringify(user.attrib) }}</td>
+                        <td>
+                            <button class="action edit" @click="editUser(user)">Edit</button>
+                            <button class="action delete" @click="deleteUser(user.id)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button @click="showAddUserForm = true">Add User</button>
+            <div v-if="showAddUserForm" class="form-group">
+                <label for="new-user-id">ID</label>
+                <input id="new-user-id" v-model="newUser.id">
+                <label for="new-user-roles">Roles (comma-separated IDs)</label>
+                <input type="text" id="new-user-roles" v-model="newUser.roles">
+                <label for="new-user-attrib">Attributes (JSON)</label>
+                <textarea id="new-user-attrib" v-model="newUser.attrib"></textarea>
+                <button @click="addUser">Save</button>
+                <button @click="showAddUserForm = false">Cancel</button>
+            </div>
+        </div>
+
+        <!-- ACL Rules Tab -->
+        <div v-if="activeTab === 'acl'" class="tab-content active">
+            <h2>ACL Rules</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Entity ID</th>
+                        <th>User ID</th>
+                        <th>Permission Level (p)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="rule in aclRules" :key="rule.entityId">
+                        <td>{{ rule.entityId }}</td>
+                        <td>{{ rule.userId || '-' }}</td>
+                        <td>{{ rule.p }}</td>
+                        <td>
+                            <button class="action edit" @click="editAclRule(rule)">Edit</button>
+                            <button class="action delete" @click="deleteAclRule(rule.entityId)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button @click="showAddAclForm = true">Add ACL Rule</button>
+            <div v-if="showAddAclForm" class="form-group">
+                <label for="new-acl-entity-id">Entity ID</label>
+                <input id="new-acl-entity-id" v-model="newAclRule.entityId">
+                <label for="new-acl-user-id">User ID (optional)</label>
+                <input id="new-acl-user-id" v-model="newAclRule.userId">
+                <label for="new-acl-p">Permission Level (p)</label>
+                <input type="number" id="new-acl-p" v-model="newAclRule.p">
+                <button @click="addAclRule">Save</button>
+                <button @click="showAddAclForm = false">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Server Response -->
+        <div class="response" v-if="response">
+            <strong>Server Response:</strong>
+            <pre>{{ response }}</pre>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
