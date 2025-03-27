@@ -1,13 +1,14 @@
 import express from "express";
 import cors from "cors";
-import { GateWarden } from "@wxn0brp/gate-warden";
+import { UserManager, WardenManager } from "@wxn0brp/gate-warden";
 import { ACLRule, Role, User } from "@wxn0brp/gate-warden/dist/types/system.js";
 import { Valthera } from "@wxn0brp/db";
 
 const app = express();
 const port = process.env.PORT || 3000;
 const db = new Valthera("test.db");
-const warden = new GateWarden(db, 1);
+const wardenMgr = new WardenManager(db);
+const userManager = new UserManager(db);
 
 app.use(cors());
 app.use(express.json());
@@ -20,23 +21,29 @@ const endpoints = {
         acl: async () => db.find<ACLRule>("acl_rules", {}),
     },
     post: {
-        role: async (data: Role) => warden.addRole(data),
-        user: async (data: User<any>) => warden.addUser(data),
-        acl: async (data: ACLRule) => warden.addACLRule(data),
+        role: async (data: Role) => wardenMgr.addRole(data),
+        user: async (data: User<any>) => userManager.createUser(data),
+        acl: async (data: ACLRule) => wardenMgr.addACLRule(data),
     },
     delete: {
-        role: async (id: string) => db.removeOne("roles", { id }),
-        user: async (id: string) => db.removeOne("users", { id }),
-        acl: async (entityId: string) => db.removeOne("acl_rules", { entityId }),
+        role: async (id: string) => wardenMgr.removeRole(id),
+        user: async (id: string) => userManager.deleteUser(id),
+        acl: async (entityId: string) => wardenMgr.removeACLRule(entityId),
     },
     put: {
-        role: async (id: string, data: Role) => db.updateOne("roles", { id }, data),
-        user: async (id: string, data: User<any>) => db.updateOne("users", { id }, data),
-        acl: async (entityId: string, data: ACLRule) => db.updateOne("acl_rules", { entityId }, data),
+        role: async (id: string, data: Role) => wardenMgr.updateRole(id, data),
+        user: async (id: string, data: User<any>) => userManager.updateUser(id, data),
+        acl: async (entityId: string, data: ACLRule) => wardenMgr.updateACLRule(entityId, data),
     }
-};
+} as const;
 
-const handleRequest = async (req, res, method, type, paramName = "id") => {
+const handleRequest = async (
+    req,
+    res,
+    method: keyof typeof endpoints,
+    type: string,
+    paramName = "id"
+) => {
     try {
         const data = req.method === "GET" ? req.query : req.body;
         const param = req.params[paramName];

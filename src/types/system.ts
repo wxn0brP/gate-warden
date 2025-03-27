@@ -1,13 +1,13 @@
 import { Id } from "@wxn0brp/db";
 
 export interface Role {
-    id: Id;
+    _id: Id;
     p: number;
 }
 
 export interface ACLRule {
     entityId: Id;
-    userId?: Id;
+    uid?: Id;
     p: number;
 }
 
@@ -17,7 +17,7 @@ export interface ABACRule<A> {
 }
 
 export interface User<A> {
-    id: Id;
+    _id: Id;
     roles: Id[];
     attrib: A;
 }
