@@ -1,49 +1,48 @@
-import { Valthera } from "@wxn0brp/db";
+import { Id, Valthera } from "@wxn0brp/db";
 import { ABACRule, ACLRule, Role } from "./types/system";
 
 class WardenManager<A = any> {
-    private db: any;
+    private db: Valthera;
     constructor(valthera: string | Valthera) {
         this.db = typeof valthera === "string" ? new Valthera(valthera) : valthera;
     }
 
+    async changeRoleNameToId(name: string): Promise<Id> {
+        return await this.db.findOne("roles", { name });
+    }
+
     // ADD
-    async addRole(role: Role): Promise<void> {
-        return await this.db.add("roles", role, false);
+    async addRole(role: Role): Promise<Role> {
+        return await this.db.add("roles", role);
     }
 
     async addACLRule(rule: ACLRule): Promise<void> {
-        return await this.db.add("acl_rules", rule, false);
+        return await this.db.add("acl/"+rule.entityId, { uid: rule.uid, p: rule.p }, false);
     }
 
-    async addABACRule(flag: number, condition: ABACRule<A>["conditions"]): Promise<void> {
-        return await this.db.add("abac_rules", { flag, conditions: condition.toString() }, false);
+    async addRBACRule(role_id: string, entity_id: string, p: number): Promise<void> {
+        return await this.db.add("role/" + role_id, { _id: entity_id, p }, false);
     }
 
-    // REMOVE
-    async removeRole(role_id: string): Promise<void> {
-        return await this.db.removeOne("roles", { _id: role_id });
+    async addABACRule(entity_id: string, flag: number, condition: ABACRule<A>["conditions"]): Promise<void> {
+        return await this.db.add("abac/"+entity_id, { flag, conditions: condition.toString() }, true);
     }
 
-    async removeACLRule(rule_id: string): Promise<void> {
-        return await this.db.removeOne("acl_rules", { _id: rule_id });
+    // DELETE
+    async removeRole(roleId: string): Promise<boolean> {
+        return await this.db.removeOne("roles", { roleId });
     }
 
-    async removeABACRule(flag: number): Promise<void> {
-        return await this.db.removeOne("abac_rules", { flag });
+    async removeACLRule(entityId: string, uid: string): Promise<boolean> {
+        return await this.db.removeOne("acl/" + entityId, { uid });
     }
 
-    // UPDATE
-    async updateABACRule(flag: number, condition: ABACRule<A>["conditions"]): Promise<void> {
-        return await this.db.update("abac_rules", { flag }, { conditions: condition.toString() });
+    async removeRBACRule(roleId: string, entityId: string): Promise<boolean> {
+        return await this.db.removeOne("role/" + roleId, { _id: entityId });
     }
 
-    async updateRole(role_id: string, updates: Partial<Role>): Promise<void> {
-        return await this.db.update("roles", { _id: role_id }, updates);
-    }
-
-    async updateACLRule(rule_id: string, updates: Partial<ACLRule>): Promise<void> {
-        return await this.db.update("acl_rules", { _id: rule_id }, updates);
+    async removeABACRule(entityId: string, flag: number): Promise<boolean> {
+        return await this.db.removeOne("abac/" + entityId, { flag });
     }
 }
 

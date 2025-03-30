@@ -1,5 +1,5 @@
 import { Id, DataBase as Valthera } from "@wxn0brp/db";
-import { ABACRule, ACLRule, Role, User } from "./types/system";
+import { ABACRule, ACLRule, Role, RoleEntity, User } from "./types/system";
 import { COLORS } from "./log";
 
 interface CheckParams<A> {
@@ -25,27 +25,28 @@ async function fetchUser<A>(db: Valthera, userId: Id): Promise<User<A>> {
 }
 
 async function aclCheck<A>({ db, entityId, flag, user }: CheckParams<A>): Promise<boolean> {
-    const rules = await db.find<ACLRule>("acl_rules", { entityId });
+    if (!await db.issetCollection("acl/" + entityId)) return false;
+    const rules = await db.find<ACLRule>("acl/" + entityId, { uid: user._id });
     for (const rule of rules) {
-        if (rule.uid && rule.uid !== user._id) continue;
         if (rule.p & flag) return true;
     }
     return false;
 }
 
-async function rbacCheck<A>({ db, flag, user, debugLog }: CheckParams<A>): Promise<boolean> {
-    const roles = await db.find<Role>("roles", { $in: { _id: user.roles } });
-    const rolePermissions = (roles || []).reduce((acc, r) => acc | r.p, 0);
-    if (debugLog >= 1)
-        console.log(
-            COLORS.blue + `[GW] User ${COLORS.yellow}${user._id}${COLORS.blue} has role permissions: ` +
-            `${COLORS.yellow}${rolePermissions}` + COLORS.reset
-        );
-    return !!(rolePermissions & flag);
+async function rbacCheck<A>({ db, flag, user, debugLog, entityId }: CheckParams<A>): Promise<boolean> {
+    for (const role of user.roles) {
+        const rolesEntity = await db.find<RoleEntity>("role/" + role, { _id: entityId });
+        console.log(rolesEntity);
+        for (const entity of rolesEntity) {
+            if (entity.p & flag) return true;
+        }
+    }
+    return false;
 }
 
 async function abacCheck<A>({ db, entityId, flag, user, debugLog }: CheckParams<A>): Promise<boolean> {
-    const rules = await db.find<ABACRule<A>>("abac_rules", { flag });
+    if (!await db.issetCollection("abac/" + entityId)) return false;
+    const rules = await db.find<ABACRule<A>>("abac/" + entityId, { flag });
     for (const rule of rules) {
         try {
             const conditions = new Function("user", "entity", `return ${rule.conditions}`)();

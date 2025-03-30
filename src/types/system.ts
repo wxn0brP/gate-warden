@@ -2,6 +2,11 @@ import { Id } from "@wxn0brp/db";
 
 export interface Role {
     _id: Id;
+    name: string;
+}
+
+export interface RoleEntity {
+    _id: Id;
     p: number;
 }
 
