@@ -36,7 +36,6 @@ async function aclCheck<A>({ db, entityId, flag, user }: CheckParams<A>): Promis
 async function rbacCheck<A>({ db, flag, user, debugLog, entityId }: CheckParams<A>): Promise<boolean> {
     for (const role of user.roles) {
         const rolesEntity = await db.find<RoleEntity>("role/" + role, { _id: entityId });
-        console.log(rolesEntity);
         for (const entity of rolesEntity) {
             if (entity.p & flag) return true;
         }
