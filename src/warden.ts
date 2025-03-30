@@ -36,7 +36,6 @@ async function aclCheck<A>({ db, entityId, flag, user }: CheckParams<A>): Promis
             }
         ]
     });
-    console.log(rules);
     for (const rule of rules) {
         if (rule.p & flag) return true;
     }
