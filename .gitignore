@@ -5,3 +5,4 @@ package-lock.json
 test.db
 .vscode
 src/test
+.suglite_history

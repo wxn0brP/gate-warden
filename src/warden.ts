@@ -26,7 +26,17 @@ async function fetchUser<A>(db: Valthera, userId: Id): Promise<User<A>> {
 
 async function aclCheck<A>({ db, entityId, flag, user }: CheckParams<A>): Promise<boolean> {
     if (!await db.issetCollection("acl/" + entityId)) return false;
-    const rules = await db.find<ACLRule>("acl/" + entityId, { uid: user._id });
+    const rules = await db.find<ACLRule>("acl/" + entityId, {
+        $or: [
+            { uid: user._id },
+            {
+                $not: {
+                    $exists: { "uid": true }
+                }
+            }
+        ]
+    });
+    console.log(rules);
     for (const rule of rules) {
         if (rule.p & flag) return true;
     }
