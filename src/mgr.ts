@@ -16,8 +16,10 @@ class WardenManager<A = any> {
         return await this.db.add("roles", role);
     }
 
-    async addACLRule(rule: ACLRule): Promise<void> {
-        return await this.db.add("acl/"+rule.entityId, { uid: rule.uid, p: rule.p }, false);
+    async addACLRule(entityId: string, p: number, uid?: Id): Promise<void> {
+        const rule: ACLRule = { p };
+        if (uid) rule.uid = uid;
+        return await this.db.add("acl/"+entityId, rule, false);
     }
 
     async addRBACRule(role_id: string, entity_id: string, p: number): Promise<void> {

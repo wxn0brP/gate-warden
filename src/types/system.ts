@@ -11,7 +11,6 @@ export interface RoleEntity {
 }
 
 export interface ACLRule {
-    entityId: Id;
     uid?: Id;
     p: number;
 }
