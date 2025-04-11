@@ -1,4 +1,4 @@
-import { Id, DataBase as Valthera } from "@wxn0brp/db";
+import { Id, Valthera } from "@wxn0brp/db";
 import { User } from "./types/system";
 
 class UserManager<A = any> {

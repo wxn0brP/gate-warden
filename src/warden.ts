@@ -1,5 +1,5 @@
-import { Id, DataBase as Valthera } from "@wxn0brp/db";
-import { ABACRule, ACLRule, Role, RoleEntity, User } from "./types/system";
+import { Id, Valthera } from "@wxn0brp/db";
+import { ABACRule, ACLRule, RoleEntity, User } from "./types/system";
 import { COLORS } from "./log";
 
 interface CheckParams<A> {
