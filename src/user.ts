@@ -1,11 +1,12 @@
 import { Id, Valthera } from "@wxn0brp/db";
 import { User } from "./types/system";
+import { createDb } from "./createDb";
 
 class UserManager<A = any> {
     private db: Valthera;
 
     constructor(valthera: string | Valthera) {
-        this.db = typeof valthera === "string" ? new Valthera(valthera) : valthera;
+        this.db = createDb(valthera);
     }
 
     /**

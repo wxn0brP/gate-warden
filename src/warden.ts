@@ -1,6 +1,7 @@
 import { Id, Valthera } from "@wxn0brp/db";
 import { ABACRule, ACLRule, RoleEntity, User } from "./types/system";
 import { COLORS } from "./log";
+import { createDb } from "./createDb";
 
 interface CheckParams<A> {
     db: Valthera;
@@ -99,7 +100,7 @@ class GateWarden<A = any> {
     private db: Valthera;
 
     constructor(valthera: string | Valthera, public debugLog: number = 0) {
-        this.db = typeof valthera === "string" ? new Valthera(valthera) : valthera;
+        this.db = createDb(valthera);
     }
 
     async hasAccess(userId: string, entityId: string, flag: number): Promise<boolean> {

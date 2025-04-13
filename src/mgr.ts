@@ -1,10 +1,12 @@
-import { Id, Valthera } from "@wxn0brp/db";
+import { autoCreate, Id, Valthera } from "@wxn0brp/db";
 import { ABACRule, ACLRule, Role } from "./types/system";
+import { Remote } from "@wxn0brp/db/dist/client/remote";
+import { createDb } from "./createDb";
 
 class WardenManager<A = any> {
     private db: Valthera;
-    constructor(valthera: string | Valthera) {
-        this.db = typeof valthera === "string" ? new Valthera(valthera) : valthera;
+    constructor(valthera: string | Valthera | Remote) {
+        this.db = createDb(valthera);
     }
 
     async changeRoleNameToId(name: string): Promise<Id> {
