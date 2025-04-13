@@ -35,8 +35,9 @@ class WardenManager<A = any> {
         return await this.db.removeOne("roles", { roleId });
     }
 
-    async removeACLRule(entityId: string, uid: string): Promise<boolean> {
-        return await this.db.removeOne("acl/" + entityId, { uid });
+    async removeACLRule(entityId: string, uid?: string): Promise<boolean> {
+        const q = uid ? { uid } : { $not: { $exists: { "uid": true } } };
+        return await this.db.removeOne("acl/" + entityId, q);
     }
 
     async removeRBACRule(roleId: string, entityId: string): Promise<boolean> {
