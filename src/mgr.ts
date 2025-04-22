@@ -1,4 +1,4 @@
-import { autoCreate, Id, Valthera } from "@wxn0brp/db";
+import { Id, Valthera } from "@wxn0brp/db";
 import { ABACRule, ACLRule, Role } from "./types/system";
 import { Remote } from "@wxn0brp/db/dist/client/remote";
 import { createDb } from "./createDb";
