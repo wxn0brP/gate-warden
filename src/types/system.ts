@@ -25,3 +25,8 @@ export interface User<A> {
     roles: Id[];
     attrib: A;
 }
+
+export interface AccessResult {
+    granted: boolean;
+    via: "ACL" | "RBAC" | "ABAC" | "user-404" | "entity-404" | "not-permitted";
+}

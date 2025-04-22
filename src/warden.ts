@@ -1,5 +1,5 @@
 import { Id, Valthera } from "@wxn0brp/db";
-import { ABACRule, ACLRule, RoleEntity, User } from "./types/system";
+import { ABACRule, AccessResult, ACLRule, RoleEntity, User } from "./types/system";
 import { COLORS } from "./log";
 import { createDb } from "./createDb";
 
@@ -25,8 +25,8 @@ async function fetchUser<A>(db: Valthera, userId: Id): Promise<User<A>> {
     return user;
 }
 
-async function aclCheck<A>({ db, entityId, flag, user }: CheckParams<A>): Promise<boolean> {
-    if (!await db.issetCollection("acl/" + entityId)) return false;
+async function aclCheck<A>({ db, entityId, flag, user }: CheckParams<A>): Promise<number> {
+    if (!await db.issetCollection("acl/" + entityId)) return -1;
     const rules = await db.find<ACLRule>("acl/" + entityId, {
         $or: [
             { uid: user._id },
@@ -37,10 +37,11 @@ async function aclCheck<A>({ db, entityId, flag, user }: CheckParams<A>): Promis
             }
         ]
     });
+    if (rules.length === 0) return -1;
     for (const rule of rules) {
-        if (rule.p & flag) return true;
+        if (rule.p & flag) return 1;
     }
-    return false;
+    return 0;
 }
 
 async function rbacCheck<A>({ db, flag, user, entityId }: CheckParams<A>): Promise<boolean> {
@@ -79,18 +80,26 @@ async function matchPermission<A>(
     flag: number,
     user: User<A>,
     debugLog: number
-): Promise<{ granted: boolean; via: string | null }> {
+): Promise<AccessResult> {
     const checks = [
         { name: "ACL", method: aclCheck },
         { name: "RBAC", method: rbacCheck },
         { name: "ABAC", method: abacCheck },
-    ];
+    ] as const;
+
+    const results = [];
 
     const checkParams: CheckParams<A> = { db, entityId, flag, user, debugLog };
     for (const check of checks) {
-        if (await check.method(checkParams)) {
+        const result = await check.method(checkParams);
+        results.push(result);
+        if (result === true || result === 1) {
             return { granted: true, via: check.name };
         }
+    }
+
+    if (results[0] === -1) {
+        return { granted: false, via: "entity-404" };
     }
 
     return { granted: false, via: null };
@@ -103,22 +112,33 @@ class GateWarden<A = any> {
         this.db = createDb(valthera);
     }
 
-    async hasAccess(userId: string, entityId: string, flag: number): Promise<boolean> {
+    async hasAccess(userId: string, entityId: string, flag: number): Promise<AccessResult> {
         const user = await fetchUser<A>(this.db, userId);
         if (!user) {
             if (this.debugLog >= 1) console.log(COLORS.red + "[GW] User not found." + COLORS.reset);
-            return false;
+            return {
+                granted: false,
+                via: "user-404"
+            };
         }
 
-        const { granted, via } = await matchPermission(this.db, entityId, flag, user, this.debugLog);
+        const matched = await matchPermission(this.db, entityId, flag, user, this.debugLog);
 
-        if (granted) {
-            logAccess(userId, entityId, via!, this.debugLog);
-            return true;
+        if (matched.granted) {
+            logAccess(userId, entityId, matched.via, this.debugLog);
+            return matched;
+        }
+
+        if (!matched.granted && matched.via === "entity-404") {
+            if (this.debugLog >= 1) console.log(COLORS.red + `[GW] Entity not found: ${entityId}` + COLORS.reset);
+            return matched;
         }
 
         if (this.debugLog >= 1) console.log(COLORS.red + `[GW] Access denied to ${entityId} by ${userId}.` + COLORS.reset);
-        return false;
+        return {
+            granted: false,
+            via: "not-permitted"
+        };
     }
 }
 
