@@ -21,6 +21,9 @@
     "peerDependencies": {
         "@wxn0brp/db": ">=0.7.1"
     },
+	"files": [
+		"dist"
+	],
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
