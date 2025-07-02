@@ -1,9 +1,9 @@
 import { Id, Valthera } from "@wxn0brp/db";
 import { ABACRule, ACLRule, Role } from "./types/system";
-import { Remote } from "@wxn0brp/db/dist/client/remote";
+import { Remote } from "@wxn0brp/db/client/remote.js";
 import { createDb } from "./createDb";
 
-class WardenManager<A = any> {
+class WardenManager {
     private db: Valthera;
     constructor(valthera: string | Valthera | Remote) {
         this.db = createDb(valthera);
@@ -28,8 +28,8 @@ class WardenManager<A = any> {
         return await this.db.add("role/" + role_id, { _id: entity_id, p }, false);
     }
 
-    async addABACRule(entity_id: string, flag: number, condition: ABACRule<A>["conditions"]): Promise<void> {
-        return await this.db.add("abac/"+entity_id, { flag, conditions: condition.toString() }, true);
+    async addABACRule(entity_id: string, flag: number, condition: ABACRule["condition"]): Promise<void> {
+        return await this.db.add("abac/"+entity_id, { flag, condition }, true);
     }
 
     // DELETE

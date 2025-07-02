@@ -13,13 +13,13 @@ class UserManager<A = any> {
      * Creates a new user
      * @param userData User data (_id is required)
      */
-    async createUser(userData: { _id: Id; roles?: Id[]; attrib?: A }): Promise<void> {
-        const newUser: User<A> = {
+    async createUser(userData: { _id: Id; roles?: Id[]; attrib?: A }): Promise<User<A>> {
+        const newUser: User = {
             _id: userData._id,
             roles: userData.roles || [],
             attrib: userData.attrib || {} as A,
         };
-        await this.db.add("users", newUser, false);
+        return await this.db.add("users", newUser, false);
     }
 
     /**
@@ -28,7 +28,7 @@ class UserManager<A = any> {
      * @returns User or null if it doesn't exist
      */
     async getUser(user_id: Id): Promise<User<A> | null> {
-        return this.db.findOne<User<A>>("users", { _id: user_id });
+        return this.db.findOne("users", { _id: user_id });
     }
 
     /**

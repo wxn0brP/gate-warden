@@ -1,4 +1,5 @@
 import { Id } from "@wxn0brp/db";
+import { SearchOptions } from "@wxn0brp/db/types/searchOpts.js";
 
 export interface Role {
     _id: Id;
@@ -15,12 +16,12 @@ export interface ACLRule {
     p: number;
 }
 
-export interface ABACRule<A> {
+export interface ABACRule {
     flag: number;
-    conditions: (user: User<A>, entity: any) => boolean;
+    condition: Record<string, SearchOptions>;
 }
 
-export interface User<A> {
+export interface User<A=any> {
     _id: Id;
     roles: Id[];
     attrib: A;
