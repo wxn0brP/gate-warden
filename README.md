@@ -66,7 +66,7 @@ await wardenManager.addRole({ _id: "roleId", name: "Admin" });
 await wardenManager.addACLRule("entityId", 0b001, "userId");
 
 // Add an ABAC rule
-await wardenManager.addABACRule("entityId", 0b001, (user, entity) => user.attrib.isAdmin);
+await wardenManager.addABACRule("entityId", 0b001, { attrib: { isAdmin: true } });
 ```
 
 ## Debug Logging
