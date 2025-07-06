@@ -1,0 +1,32 @@
+{
+  "name": "@wxn0brp/gate-warden",
+  "version": "0.2.2",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "wxn0brP",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "@wxn0brp/db": "0.10.0",
+    "source-map-support": "^0.5.21",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "@wxn0brp/db": ">=0.10.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./*",
+      "import": "./*"
+    }
+  }
+}
