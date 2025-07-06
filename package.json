@@ -6,9 +6,14 @@
     "author": "wxn0brP",
     "license": "MIT",
     "type": "module",
+    "description": "A simple and flexible access control library for Node.js.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wxn0brP/gate-warden.git"
+    },
+    "homepage": "https://github.com/wxn0brP/gate-warden",
     "scripts": {
         "build": "tsc && tsc-alias",
-        "build-dev": "tsc -p tsconfig.dev.json && tsc-alias",
         "test": "node dist/test/test.js"
     },
     "devDependencies": {
