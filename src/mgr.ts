@@ -1,13 +1,8 @@
-import { Id, Valthera } from "@wxn0brp/db";
+import { Id, ValtheraCompatible } from "@wxn0brp/db-core";
 import { ABACRule, ACLRule, Role } from "./types/system";
-import { Remote } from "@wxn0brp/db/client/remote.js";
-import { createDb } from "./createDb";
 
 class WardenManager {
-    private db: Valthera;
-    constructor(valthera: string | Valthera | Remote) {
-        this.db = createDb(valthera);
-    }
+    constructor(private db: ValtheraCompatible) { }
 
     async changeRoleNameToId(name: string): Promise<Id> {
         return await this.db.findOne("roles", { name });
@@ -21,7 +16,7 @@ class WardenManager {
     async addACLRule(entityId: string, p: number, uid?: Id): Promise<void> {
         const rule: ACLRule = { p };
         if (uid) rule.uid = uid;
-        return await this.db.add("acl/"+entityId, rule, false);
+        return await this.db.add("acl/" + entityId, rule, false);
     }
 
     async addRBACRule(role_id: string, entity_id: string, p: number): Promise<void> {
@@ -29,7 +24,7 @@ class WardenManager {
     }
 
     async addABACRule(entity_id: string, flag: number, condition: ABACRule["condition"]): Promise<void> {
-        return await this.db.add("abac/"+entity_id, { flag, condition }, true);
+        return await this.db.add("abac/" + entity_id, { flag, condition }, true);
     }
 
     // DELETE

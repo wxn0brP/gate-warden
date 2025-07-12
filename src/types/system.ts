@@ -1,5 +1,5 @@
-import { Id } from "@wxn0brp/db";
-import { SearchOptions } from "@wxn0brp/db/types/searchOpts.js";
+import { Id } from "@wxn0brp/db-core";
+import { SearchOptions } from "@wxn0brp/db-core/types/searchOpts";
 
 export interface Role {
     _id: Id;

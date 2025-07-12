@@ -1,13 +1,8 @@
-import { Id, Valthera } from "@wxn0brp/db";
+import { Id, ValtheraCompatible } from "@wxn0brp/db-core";
 import { User } from "./types/system";
-import { createDb } from "./createDb";
 
 class UserManager<A = any> {
-    private db: Valthera;
-
-    constructor(valthera: string | Valthera) {
-        this.db = createDb(valthera);
-    }
+    constructor(private db: ValtheraCompatible) { }
 
     /**
      * Creates a new user

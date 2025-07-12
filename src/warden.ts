@@ -1,11 +1,10 @@
-import { Id, Valthera } from "@wxn0brp/db";
+import { Id, ValtheraCompatible } from "@wxn0brp/db-core";
 import { ABACRule, AccessResult, ACLRule, RoleEntity, User } from "./types/system";
 import { COLORS } from "./log";
-import { createDb } from "./createDb";
-import hasFieldsAdvanced from "@wxn0brp/db/utils/hasFieldsAdvanced.js";
+import hasFieldsAdvanced from "@wxn0brp/db-core/utils/hasFieldsAdvanced";
 
 interface CheckParams {
-    db: Valthera;
+    db: ValtheraCompatible;
     entityId: Id;
     flag: number;
     user: User;
@@ -20,7 +19,7 @@ function logAccess(userId: Id, entityId: Id, via: string, debugLog: number) {
     );
 }
 
-async function fetchUser(db: Valthera, userId: Id): Promise<User> {
+async function fetchUser(db: ValtheraCompatible, userId: Id): Promise<User> {
     const user = await db.findOne<User>("users", { _id: userId });
     if (!user) throw new Error("User not found");
     return user;
@@ -137,7 +136,7 @@ async function abacCheck({ db, entityId, flag, user, debugLog }: CheckParams): P
 }
 
 async function matchPermission(
-    db: Valthera,
+    db: ValtheraCompatible,
     entityId: Id,
     flag: number,
     user: User,
@@ -168,11 +167,7 @@ async function matchPermission(
 }
 
 class GateWarden<A = any> {
-    private db: Valthera;
-
-    constructor(valthera: string | Valthera, public debugLog: number = 0) {
-        this.db = createDb(valthera);
-    }
+    constructor(private db: ValtheraCompatible, public debugLog: number = 0) { }
 
     async hasAccess(userId: string, entityId: string, flag: number): Promise<AccessResult> {
         const user = await fetchUser(this.db, userId);
