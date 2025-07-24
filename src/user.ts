@@ -14,7 +14,7 @@ class UserManager<A = any> {
             roles: userData.roles || [],
             attrib: userData.attrib || {} as A,
         };
-        return await this.db.add("users", newUser, false);
+        return await this.db.add<User<A>>("users", newUser, false);
     }
 
     /**
@@ -23,7 +23,7 @@ class UserManager<A = any> {
      * @returns User or null if it doesn't exist
      */
     async getUser(user_id: Id): Promise<User<A> | null> {
-        return this.db.findOne("users", { _id: user_id });
+        return this.db.findOne<User<A>>("users", { _id: user_id });
     }
 
     /**
