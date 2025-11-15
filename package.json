@@ -17,6 +17,7 @@
         "test": "bun run src/test.ts"
     },
     "devDependencies": {
+        "@types/bun": "*",
         "@types/node": "*",
         "@wxn0brp/db-core": "^0.2.7",
         "tsc-alias": "*",

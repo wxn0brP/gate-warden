@@ -7,5 +7,5 @@ export interface CheckParams {
     entityId: Id;
     flag: number;
     user: User;
-    debugLog: number;
+    debugLog?: number;
 }
