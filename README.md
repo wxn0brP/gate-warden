@@ -13,7 +13,7 @@ Gate Warden is a lightweight access control library that supports ACL, RBAC, and
 Install the library using npm or yarn:
 
 ```bash
-yarn add @wxn0brp/gate-warden
+npm i @wxn0brp/gate-warden
 ```
 
 ## DOCS
