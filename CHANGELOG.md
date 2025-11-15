@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/wxn0brP/gate-warden/compare/v0.4.1...v0.5.0) (2025-11-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* organize code
+
+### Features
+
+* organize code ([4f438b3](https://github.com/wxn0brP/gate-warden/commit/4f438b3f149b9e5909baa67840a611cdc8c476d7))
+* rusalka ci & bump deps ([20112d0](https://github.com/wxn0brP/gate-warden/commit/20112d0c367aa9533f4576246d006b8caff18ff8))
+* unit tests ([c42429f](https://github.com/wxn0brP/gate-warden/commit/c42429fffb72fca7a5c42de0ee6216c7d18f5ebd))
+
+
+### Bug Fixes
+
+* type ([1b2c243](https://github.com/wxn0brP/gate-warden/commit/1b2c243a2b75e762596dbb61717b700384b1cf28))
+* type ([9806d40](https://github.com/wxn0brP/gate-warden/commit/9806d40237c65bce17c39b780420430a62013891))
+
 ### [0.4.1](https://github.com/wxn0brP/gate-warden/compare/v0.4.0...v0.4.1) (2025-09-20)
 
 ## [0.4.0](https://github.com/wxn0brP/gate-warden/compare/v0.3.0...v0.4.0) (2025-07-24)
