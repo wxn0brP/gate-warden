@@ -80,14 +80,6 @@ Set the `debugLog` level in `GateWarden` to enable debug messages:
 - `1`: Basic logs
 - `2`: Detailed logs
 
-## Project Structure
-
-- **src/warden.ts:** Core access control logic.
-- **src/user.ts:** User management.
-- **src/mgr.ts:** Role and rule management.
-- **src/types/system.ts:** Type definitions for roles, rules, and users.
-- **src/log.ts:** Logging utilities.
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
