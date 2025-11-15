@@ -9,7 +9,7 @@ export class WardenManager {
     }
 
     // ADD
-    async addRole(role: Role): Promise<Role> {
+    async addRole(role: Role | Omit<Role, "_id">): Promise<Role> {
         return await this.db.add<Role>("roles", role);
     }
 
