@@ -16,6 +16,10 @@ Install the library using npm or yarn:
 yarn add @wxn0brp/gate-warden
 ```
 
+## DOCS
+
+See [Docs](https://wxn0brp.github.io/gate-warden/)
+
 ## Usage
 
 ### GateWarden

@@ -14,16 +14,16 @@
     "homepage": "https://github.com/wxn0brP/gate-warden",
     "scripts": {
         "build": "tsc && tsc-alias",
-        "test": "node dist/test/test.js"
+        "test": "bun run src/test/test.ts"
     },
     "devDependencies": {
         "@types/node": "*",
-        "@wxn0brp/db-core": "^0.2.2",
+        "@wxn0brp/db-core": "^0.2.7",
         "tsc-alias": "*",
         "typescript": "*"
     },
     "peerDependencies": {
-        "@wxn0brp/db-core": ">=0.2.2"
+        "@wxn0brp/db-core": ">=0.2.7"
     },
     "files": [
         "dist"
@@ -31,11 +31,13 @@
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
+            "default": "./dist/index.js",
             "import": "./dist/index.js"
         },
         "./*": {
-            "types": "./dist/*",
-            "import": "./dist/*"
+            "types": "./dist/*.d.ts",
+            "default": "./dist/*.js",
+            "import": "./dist/*.js"
         }
     }
 }
