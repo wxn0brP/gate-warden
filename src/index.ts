@@ -1,13 +1,7 @@
-import GateWarden from "./warden";
-import UserManager from "./user";
-import WardenManager from "./mgr";
+export * from "./warden";
+export * from "./user";
+export * from "./mgr";
 import { AccessResult } from "./types/system";
-
-export {
-    GateWarden,
-    UserManager,
-    WardenManager,
-};
 
 export type {
     AccessResult

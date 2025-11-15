@@ -1,7 +1,7 @@
 import { Id, ValtheraCompatible } from "@wxn0brp/db-core";
 import { User } from "./types/system";
 
-class UserManager<A = any> {
+export class UserManager<A = any> {
     constructor(private db: ValtheraCompatible) { }
 
     /**
@@ -87,5 +87,3 @@ class UserManager<A = any> {
         await this.db.update("users", { _id: user_id }, user);
     }
 }
-
-export default UserManager;

@@ -1,7 +1,7 @@
 import { Id, ValtheraCompatible } from "@wxn0brp/db-core";
 import { ABACRule, ACLRule, Role, RoleEntity } from "./types/system";
 
-class WardenManager {
+export class WardenManager {
     constructor(private db: ValtheraCompatible) { }
 
     async changeRoleNameToId(name: string): Promise<Id> {
@@ -45,5 +45,3 @@ class WardenManager {
         return await this.db.removeOne("abac/" + entityId, { flag });
     }
 }
-
-export default WardenManager;
