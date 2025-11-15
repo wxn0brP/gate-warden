@@ -14,7 +14,7 @@
     "homepage": "https://github.com/wxn0brP/gate-warden",
     "scripts": {
         "build": "tsc && tsc-alias",
-        "test": "bun run src/test/test.ts"
+        "test": "bun run src/test.ts"
     },
     "devDependencies": {
         "@types/node": "*",

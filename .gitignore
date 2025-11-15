@@ -1,8 +1,11 @@
 dist
 node_modules
+.vscode
+
 yarn.lock
 package-lock.json
-test.db
-.vscode
-src/test
+bun.lock
 .suglite_history
+
+test.db
+src/test.ts

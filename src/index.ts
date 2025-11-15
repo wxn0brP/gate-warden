@@ -7,5 +7,8 @@ export {
     GateWarden,
     UserManager,
     WardenManager,
+};
+
+export type {
     AccessResult
 };
