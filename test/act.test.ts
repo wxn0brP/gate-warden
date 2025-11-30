@@ -1,7 +1,7 @@
+import { aclCheck } from "#check";
+import { ACLRule, User } from "#types/system";
 import { createMemoryValthera, ValtheraCompatible } from "@wxn0brp/db-core";
 import { describe, expect, it } from "bun:test";
-import { aclCheck } from "../check";
-import { ACLRule, User } from "../types/system";
 
 describe("Access Control Checks", () => {
     describe("aclCheck", () => {

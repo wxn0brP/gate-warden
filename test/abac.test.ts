@@ -1,7 +1,7 @@
+import { abacCheck } from "#check";
+import { ABACRule, User } from "#types/system";
 import { createMemoryValthera } from "@wxn0brp/db-core";
 import { describe, expect, it } from "bun:test";
-import { abacCheck } from "../check";
-import { ABACRule, User } from "../types/system";
 
 describe("Access Control Checks", () => {
     describe("abacCheck", () => {
