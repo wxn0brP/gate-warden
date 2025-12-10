@@ -33,7 +33,7 @@ export class WardenManager {
     }
 
     async removeACLRule(entityId: string, uid?: string): Promise<boolean> {
-        const q = uid ? { uid } : { $not: { $exists: { "uid": true } } };
+        const q: any = uid ? { uid } : { $not: { $exists: { "uid": true } } };
         return await this.db.removeOne("acl/" + entityId, q);
     }
 
