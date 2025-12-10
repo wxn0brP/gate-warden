@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.1](https://github.com/wxn0brP/gate-warden/compare/v0.5.0...v0.5.1) (2025-12-10)
+
+
+### Bug Fixes
+
+* type error ([4d703fa](https://github.com/wxn0brP/gate-warden/commit/4d703fa7063ef9b27a073d986488b1b3bca88abc))
+
 ## [0.5.0](https://github.com/wxn0brP/gate-warden/compare/v0.4.1...v0.5.0) (2025-11-15)
 
 
