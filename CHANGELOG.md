@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.2](https://github.com/wxn0brP/gate-warden/compare/v0.5.1...v0.5.2) (2026-01-20)
+
+
+### Features
+
+* move collections to cfg obj ([45ff084](https://github.com/wxn0brP/gate-warden/commit/45ff084949701d89219097d709280511f5bad914))
+
+
+### Bug Fixes
+
+* mgr ([674ec96](https://github.com/wxn0brP/gate-warden/commit/674ec96708e8f04f7f5431e6c9b5cc1796097111))
+
 ### [0.5.1](https://github.com/wxn0brP/gate-warden/compare/v0.5.0...v0.5.1) (2025-12-10)
 
 
