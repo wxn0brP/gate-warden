@@ -3,9 +3,10 @@ import { abacCheck, aclCheck, rbacCheck } from "./check";
 import { COLORS, logAccess } from "./log";
 import { CheckParams } from "./types/check";
 import { AccessResult, User } from "./types/system";
+import { collections } from "./const";
 
 export async function fetchUser(db: ValtheraCompatible, userId: Id): Promise<User> {
-    const user = await db.findOne<User>("users", { _id: userId });
+    const user = await db.findOne<User>(collections.users, { _id: userId });
     if (!user) throw new Error("User not found");
     return user;
 }

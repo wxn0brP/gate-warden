@@ -4,6 +4,7 @@ import { COLORS } from "./log";
 import { CheckParams } from "./types/check";
 import { ABACRule, ACLRule, RoleEntity } from "./types/system";
 import { convertPath } from "./utils";
+import { collections } from "./const";
 
 /**
  * Checks if a user has the given flag on the given entity by checking the entity's ACL.
@@ -17,9 +18,9 @@ import { convertPath } from "./utils";
  *   - -1 if the entity does not have an ACL
  */
 export async function aclCheck({ db, entityId, flag, user }: CheckParams): Promise<number> {
-    if (!await db.issetCollection("acl/" + entityId)) return -1;
+    if (!await db.issetCollection(collections.acl + "/" + entityId)) return -1;
 
-    const rules = await db.find<ACLRule>("acl/" + entityId, {
+    const rules = await db.find<ACLRule>(collections.acl + "/" + entityId, {
         $or: [
             { uid: user._id },
             {
@@ -46,7 +47,7 @@ export async function aclCheck({ db, entityId, flag, user }: CheckParams): Promi
  */
 export async function rbacCheck({ db, flag, user, entityId }: CheckParams): Promise<boolean> {
     for (const role of user.roles) {
-        const rolesEntity = await db.find<RoleEntity>("role/" + role, { _id: entityId });
+        const rolesEntity = await db.find<RoleEntity>(collections.role + "/" + role, { _id: entityId });
         for (const entity of rolesEntity) {
             if (entity.p & flag) return true;
         }
@@ -64,9 +65,9 @@ export async function rbacCheck({ db, flag, user, entityId }: CheckParams): Prom
  * @returns `true` if access is granted, `false` otherwise
  */
 export async function abacCheck({ db, entityId, flag, user, debugLog }: CheckParams): Promise<boolean> {
-    if (!await db.issetCollection("abac/" + entityId)) return false;
+    if (!await db.issetCollection(collections.abac + "/" + entityId)) return false;
 
-    const rules = await db.find<ABACRule>("abac/" + entityId, { flag });
+    const rules = await db.find<ABACRule>(collections.abac + "/" + entityId, { flag });
     if (rules.length === 0) return false;
 
     for (const rule of rules) {
