@@ -1,4 +1,4 @@
-import Id from "@wxn0brp/db-core/types/Id";
+import { Id } from "@wxn0brp/db-core/types/Id";
 
 export const COLORS = {
     reset: "\x1b[0m",
