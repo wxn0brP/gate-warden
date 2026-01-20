@@ -1,5 +1,5 @@
 import { Id, ValtheraCompatible } from "@wxn0brp/db-core";
-import { ABACRule, ACLRule, Role, RoleEntity } from "./types/system";
+import { ABACRule, ACLRule, Role, RoleRule } from "./types/system";
 import { collections } from "./const";
 
 export class WardenManager {
@@ -20,8 +20,8 @@ export class WardenManager {
         return await this.db.add<ACLRule>(collections.acl + "/" + entityId, rule, false);
     }
 
-    async addRBACRule(role_id: string, entity_id: string, p: number): Promise<RoleEntity> {
-        return await this.db.add<RoleEntity>(collections.role + "/" + role_id, { _id: entity_id, p }, false);
+    async addRBACRule(role_id: string, entity_id: string, p: number): Promise<RoleRule> {
+        return await this.db.add<RoleRule>(collections.role + "/" + role_id, { _id: entity_id, p }, false);
     }
 
     async addABACRule(entity_id: string, flag: number, condition: ABACRule["condition"]): Promise<ABACRule> {
@@ -30,19 +30,19 @@ export class WardenManager {
 
     // DELETE
     async removeRole(roleId: string): Promise<boolean> {
-        return await this.db.removeOne(collections.roles, { roleId });
+        return await this.db.removeOne<Role>(collections.roles, { _id: roleId });
     }
 
     async removeACLRule(entityId: string, uid?: string): Promise<boolean> {
         const q: any = uid ? { uid } : { $not: { $exists: { "uid": true } } };
-        return await this.db.removeOne(collections.acl + "/" + entityId, q);
+        return await this.db.removeOne<ACLRule>(collections.acl + "/" + entityId, q);
     }
 
     async removeRBACRule(roleId: string, entityId: string): Promise<boolean> {
-        return await this.db.removeOne(collections.role + "/" + roleId, { _id: entityId });
+        return await this.db.removeOne<RoleRule>(collections.role + "/" + roleId, { _id: entityId });
     }
 
     async removeABACRule(entityId: string, flag: number): Promise<boolean> {
-        return await this.db.removeOne(collections.abac + "/" + entityId, { flag });
+        return await this.db.removeOne<ABACRule>(collections.abac + "/" + entityId, { flag });
     }
 }

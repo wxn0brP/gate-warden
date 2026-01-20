@@ -6,7 +6,7 @@ export interface Role {
     name: string;
 }
 
-export interface RoleEntity {
+export interface RoleRule {
     _id: Id;
     p: number;
 }
@@ -21,7 +21,7 @@ export interface ABACRule {
     condition: Record<string, SearchOptions>;
 }
 
-export interface User<A=any> {
+export interface User<A = any> {
     _id: Id;
     roles: Id[];
     attrib: A;

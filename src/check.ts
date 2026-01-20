@@ -2,7 +2,7 @@
 import hasFieldsAdvanced from "@wxn0brp/db-core/utils/hasFieldsAdvanced";
 import { COLORS } from "./log";
 import { CheckParams } from "./types/check";
-import { ABACRule, ACLRule, RoleEntity } from "./types/system";
+import { ABACRule, ACLRule, RoleRule } from "./types/system";
 import { convertPath } from "./utils";
 import { collections } from "./const";
 
@@ -47,7 +47,7 @@ export async function aclCheck({ db, entityId, flag, user }: CheckParams): Promi
  */
 export async function rbacCheck({ db, flag, user, entityId }: CheckParams): Promise<boolean> {
     for (const role of user.roles) {
-        const rolesEntity = await db.find<RoleEntity>(collections.role + "/" + role, { _id: entityId });
+        const rolesEntity = await db.find<RoleRule>(collections.role + "/" + role, { _id: entityId });
         for (const entity of rolesEntity) {
             if (entity.p & flag) return true;
         }
