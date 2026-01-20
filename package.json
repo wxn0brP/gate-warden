@@ -1,0 +1,40 @@
+{
+  "name": "@wxn0brp/gate-warden",
+  "version": "0.5.3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "wxn0brP",
+  "license": "MIT",
+  "type": "module",
+  "description": "A simple and flexible access control library for Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wxn0brP/gate-warden.git"
+  },
+  "homepage": "https://github.com/wxn0brP/gate-warden",
+  "devDependencies": {
+    "@types/bun": "*",
+    "@types/node": "*",
+    "@wxn0brp/db-core": "^0.4.0",
+    "tsc-alias": "*",
+    "typescript": "*"
+  },
+  "peerDependencies": {
+    "@wxn0brp/db-core": ">=0.4.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js",
+      "import": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js",
+      "import": "./dist/*.js"
+    }
+  }
+}
