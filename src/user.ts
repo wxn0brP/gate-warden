@@ -15,7 +15,8 @@ export class UserManager<A = any> {
             roles: userData.roles || [],
             attrib: userData.attrib || {} as A,
         };
-        return await this.db.add<User<A>>(collections.users, newUser, false);
+        // return await this.db.add<User<A>>(collections.users, newUser, false);
+        return await this.db.c<User<A>>(collections.users).add(newUser, false);
     }
 
     /**
@@ -24,7 +25,7 @@ export class UserManager<A = any> {
      * @returns User or null if it doesn't exist
      */
     async getUser(user_id: Id): Promise<User<A> | null> {
-        return this.db.findOne<User<A>>(collections.users, { _id: user_id });
+        return this.db.c<User<A>>(collections.users).findOne({ _id: user_id });
     }
 
     /**
@@ -36,7 +37,7 @@ export class UserManager<A = any> {
         const existingUser = await this.getUser(user_id);
         if (!existingUser) throw new Error("User not found");
         const updatedUser = { ...existingUser, ...updates };
-        await this.db.update(collections.users, { _id: user_id }, updatedUser);
+        await this.db.c(collections.users).update({ _id: user_id }, updatedUser);
     }
 
     /**
@@ -44,7 +45,7 @@ export class UserManager<A = any> {
      * @param user_id User _id
      */
     async deleteUser(user_id: Id): Promise<void> {
-        await this.db.removeOne(collections.users, { _id: user_id });
+        await this.db.c(collections.users).removeOne({ _id: user_id });
     }
 
     /**
@@ -57,7 +58,7 @@ export class UserManager<A = any> {
         if (!user) throw new Error("User not found");
         if (!user.roles.includes(role_id)) {
             user.roles.push(role_id);
-            await this.db.update(collections.users, { _id: user_id }, user);
+            await this.db.c(collections.users).update({ _id: user_id }, user);
         }
     }
 
@@ -72,7 +73,7 @@ export class UserManager<A = any> {
         const index = user.roles.indexOf(role_id);
         if (index !== -1) {
             user.roles.splice(index, 1);
-            await this.db.update(collections.users, { _id: user_id }, user);
+            await this.db.c(collections.users).update({ _id: user_id }, user);
         }
     }
 
@@ -85,6 +86,6 @@ export class UserManager<A = any> {
         const user = await this.getUser(user_id);
         if (!user) throw new Error("User not found");
         user.attrib = { ...user.attrib, ...attributes };
-        await this.db.update(collections.users, { _id: user_id }, user);
+        await this.db.c(collections.users).update({ _id: user_id }, user);
     }
 }

@@ -5,44 +5,44 @@ import { collections } from "./const";
 export class WardenManager {
     constructor(private db: ValtheraCompatible) { }
 
-    async changeRoleNameToId(name: string): Promise<Id> {
-        return await this.db.findOne<Role>(collections.roles, { name }).then((r) => r._id);
+    changeRoleNameToId(name: string): Promise<Id> {
+        return this.db.c<Role>(collections.roles).findOne({ name }).then((r) => r._id);
     }
 
     // ADD
-    async addRole(role: Role | Omit<Role, "_id">): Promise<Role> {
-        return await this.db.add<Role>(collections.roles, role);
+    addRole(role: Role | Omit<Role, "_id">): Promise<Role> {
+        return this.db.c<Role>(collections.roles).add(role);
     }
 
-    async addACLRule(entityId: string, p: number, uid?: Id): Promise<ACLRule> {
+    addACLRule(entityId: string, p: number, uid?: Id): Promise<ACLRule> {
         const rule: ACLRule = { p };
         if (uid) rule.uid = uid;
-        return await this.db.add<ACLRule>(collections.acl + "/" + entityId, rule, false);
+        return this.db.c<ACLRule>(collections.acl + "/" + entityId).add(rule, false);
     }
 
-    async addRBACRule(role_id: string, entity_id: string, p: number): Promise<RoleRule> {
-        return await this.db.add<RoleRule>(collections.role + "/" + role_id, { _id: entity_id, p }, false);
+    addRBACRule(role_id: string, entity_id: string, p: number): Promise<RoleRule> {
+        return this.db.c<RoleRule>(collections.role + "/" + role_id).add({ _id: entity_id, p }, false);
     }
 
-    async addABACRule(entity_id: string, flag: number, condition: ABACRule["condition"]): Promise<ABACRule> {
-        return await this.db.add<ABACRule>(collections.abac + "/" + entity_id, { flag, condition }, true);
+    addABACRule(entity_id: string, flag: number, condition: ABACRule["condition"]): Promise<ABACRule> {
+        return this.db.c<ABACRule>(collections.abac + "/" + entity_id).add({ flag, condition }, true);
     }
 
     // DELETE
-    async removeRole(roleId: string): Promise<boolean> {
-        return await this.db.removeOne<Role>(collections.roles, { _id: roleId });
+    removeRole(roleId: string): Promise<Role | null> {
+        return this.db.c<Role>(collections.roles).removeOne({ _id: roleId });
     }
 
-    async removeACLRule(entityId: string, uid?: string): Promise<boolean> {
+    removeACLRule(entityId: string, uid?: string): Promise<ACLRule | null> {
         const q: any = uid ? { uid } : { $not: { $exists: { "uid": true } } };
-        return await this.db.removeOne<ACLRule>(collections.acl + "/" + entityId, q);
+        return this.db.c<ACLRule>(collections.acl + "/" + entityId).removeOne(q);
     }
 
-    async removeRBACRule(roleId: string, entityId: string): Promise<boolean> {
-        return await this.db.removeOne<RoleRule>(collections.role + "/" + roleId, { _id: entityId });
+    removeRBACRule(roleId: string, entityId: string): Promise<RoleRule | null> {
+        return this.db.c<RoleRule>(collections.role + "/" + roleId).removeOne({ _id: entityId });
     }
 
-    async removeABACRule(entityId: string, flag: number): Promise<boolean> {
-        return await this.db.removeOne<ABACRule>(collections.abac + "/" + entityId, { flag });
+    removeABACRule(entityId: string, flag: number): Promise<ABACRule | null> {
+        return this.db.c<ABACRule>(collections.abac + "/" + entityId).removeOne({ flag });
     }
 }

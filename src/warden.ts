@@ -6,7 +6,7 @@ import { AccessResult, User } from "./types/system";
 import { collections } from "./const";
 
 export async function fetchUser(db: ValtheraCompatible, userId: Id): Promise<User> {
-    const user = await db.findOne<User>(collections.users, { _id: userId });
+    const user = await db.c<User>(collections.users).findOne({ _id: userId });
     if (!user) throw new Error("User not found");
     return user;
 }
