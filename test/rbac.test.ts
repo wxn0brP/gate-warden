@@ -1,12 +1,12 @@
 import { rbacCheck } from "#check";
-import { RoleEntity, User } from "#types/system";
+import { RoleRule, User } from "#types/system";
 import { createMemoryValthera } from "@wxn0brp/db-core";
 import { describe, expect, it } from "bun:test";
 
 describe("Access Control Checks", () => {
     describe("rbacCheck", () => {
-        it("should return true when user has role with the required flag", async () => {
-            const rolesData: RoleEntity[] = [
+        it("1. should return true when user has role with the required flag", async () => {
+            const rolesData: RoleRule[] = [
                 { _id: "resource1", p: 5 } // Flags 1 and 4
             ];
 
@@ -27,8 +27,8 @@ describe("Access Control Checks", () => {
             expect(result).toBe(true);
         });
 
-        it("should return false when user has role without the required flag", async () => {
-            const rolesData: RoleEntity[] = [
+        it("2. should return false when user has role without the required flag", async () => {
+            const rolesData: RoleRule[] = [
                 { _id: "resource1", p: 4 } // Only flag 4
             ];
 
@@ -49,8 +49,8 @@ describe("Access Control Checks", () => {
             expect(result).toBe(false);
         });
 
-        it("should return false when user has no matching role-entity permissions", async () => {
-            const rolesData: RoleEntity[] = [
+        it("3. should return false when user has no matching role-entity permissions", async () => {
+            const rolesData: RoleRule[] = [
                 { _id: "resource2", p: 1 } // Different resource
             ];
 
@@ -71,7 +71,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(false);
         });
 
-        it("should return false when user has no roles", async () => {
+        it("4. should return false when user has no roles", async () => {
             const db = createMemoryValthera({});
             const user: User = { _id: "user1", roles: [], attrib: {} };
 

@@ -5,7 +5,7 @@ import { describe, expect, it } from "bun:test";
 
 describe("Access Control Checks", () => {
     describe("aclCheck", () => {
-        it("should return -1 when entity has no ACL collection", async () => {
+        it("1. should return -1 when entity has no ACL collection", async () => {
             const db: ValtheraCompatible = createMemoryValthera({});
             const user: User = { _id: "user1", roles: [], attrib: {} };
 
@@ -19,7 +19,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(-1);
         });
 
-        it("should return 1 when user has the specific flag in ACL", async () => {
+        it("2. should return 1 when user has the specific flag in ACL", async () => {
             const aclRules: ACLRule[] = [
                 { uid: "user1", p: 5 } // User has flags 1 and 4 (1 | 4 = 5)
             ];
@@ -41,7 +41,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(1);
         });
 
-        it("should return 0 when user does not have the flag in ACL", async () => {
+        it("3. should return 0 when user does not have the flag in ACL", async () => {
             const aclRules: ACLRule[] = [
                 { uid: "user1", p: 4 } // User has only flag 4
             ];
@@ -63,7 +63,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(0);
         });
 
-        it("should return 1 when there is a public rule with the flag", async () => {
+        it("4. should return 1 when there is a public rule with the flag", async () => {
             const aclRules: ACLRule[] = [
                 { p: 3 } // Public rule with flags 1 and 2
             ];
@@ -85,7 +85,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(1);
         });
 
-        it("should return -1 when no rules match the user or public access", async () => {
+        it("5. should return -1 when no rules match the user or public access", async () => {
             const aclRules: ACLRule[] = [
                 { uid: "user2", p: 1 } // Different user has the flag
             ];

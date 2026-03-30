@@ -5,7 +5,7 @@ import { describe, expect, it } from "bun:test";
 
 describe("Access Control Checks", () => {
     describe("abacCheck", () => {
-        it("should return false when entity has no ABAC collection", async () => {
+        it("1. should return false when entity has no ABAC collection", async () => {
             const db = createMemoryValthera({});
             const user: User = { _id: "user1", roles: [], attrib: { department: "engineering" } };
 
@@ -20,7 +20,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(false);
         });
 
-        it("should return true when user attributes match ABAC rule", async () => {
+        it("2. should return true when user attributes match ABAC rule", async () => {
             const abacRules: ABACRule[] = [
                 {
                     flag: 1,
@@ -49,7 +49,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(true);
         });
 
-        it("should return false when user attributes don't match ABAC rule", async () => {
+        it("3. should return false when user attributes don't match ABAC rule", async () => {
             const abacRules: ABACRule[] = [
                 {
                     flag: 1,
@@ -78,7 +78,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(false);
         });
 
-        it("should handle nested attribute paths correctly", async () => {
+        it("4. should handle nested attribute paths correctly", async () => {
             const abacRules: ABACRule[] = [
                 {
                     flag: 1,
@@ -116,7 +116,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(true);
         });
 
-        it("should return false when user attributes are undefined", async () => {
+        it("5. should return false when user attributes are undefined", async () => {
             const abacRules: ABACRule[] = [
                 {
                     flag: 1,
@@ -145,7 +145,7 @@ describe("Access Control Checks", () => {
             expect(result).toBe(false);
         });
 
-        it("should return true when checking user root properties with _", async () => {
+        it("6. should return true when checking user root properties with _", async () => {
             const abacRules: ABACRule[] = [
                 {
                     flag: 1,
