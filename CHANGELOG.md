@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.6.1](https://github.com/wxn0brP/gate-warden/compare/v0.6.0...v0.6.1) (2026-03-30)
+
+
+### Bug Fixes
+
+* security & bump deps ([c316d04](https://github.com/wxn0brP/gate-warden/commit/c316d0415a68846bd8e770462655e89be085398b))
+
 ## [0.6.0](https://github.com/wxn0brP/gate-warden/compare/v0.5.3...v0.6.0) (2026-02-18)
 
 
