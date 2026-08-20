@@ -1,7 +1,7 @@
 export const collections = {
-    users: "users",
-    roles: "roles",
-    acl: "acl",
-    role: "role",
-    abac: "abac"
-}
+	users: "users",
+	roles: "roles",
+	acl: "acl",
+	role: "role",
+	abac: "abac",
+};
