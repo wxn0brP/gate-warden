@@ -13,8 +13,7 @@
     },
     "homepage": "https://github.com/wxn0brP/gate-warden",
     "scripts": {
-        "build": "tsc && tsc-alias",
-        "test": "bun run src/test.ts"
+        "build": "tsc && tsc-alias"
     },
     "devDependencies": {
         "@types/bun": "*",
