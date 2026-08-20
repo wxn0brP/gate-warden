@@ -5,15 +5,10 @@ import { CheckParams } from "./types/check";
 import { AccessResult, User } from "./types/system";
 import { collections } from "./const";
 
-export async function fetchUser(
-	db: ValtheraCompatible,
-	userId: Id,
-): Promise<User> {
-	const user = await db.c<User>(collections.users).findOne({
+export function fetchUser(db: ValtheraCompatible, userId: Id): Promise<User> {
+	return db.c<User>(collections.users).findOne({
 		_id: userId,
 	});
-	if (!user) throw new Error("User not found");
-	return user;
 }
 
 export async function matchPermission(

@@ -19,7 +19,6 @@ export class UserManager<A = any> {
 			roles: userData.roles || [],
 			attrib: userData.attrib || ({} as A),
 		};
-		// return await this.db.add<User<A>>(collections.users, newUser, false);
 		return await this.db.c<User<A>>(collections.users).add(newUser, false);
 	}
 
@@ -38,10 +37,11 @@ export class UserManager<A = any> {
 	 * Updates a user's data
 	 * @param user_id User _id
 	 * @param updates Object with fields to update
+	 * @returns Whether the update was successful
 	 */
-	async updateUser(user_id: Id, updates: Partial<User<A>>): Promise<void> {
+	async updateUser(user_id: Id, updates: Partial<User<A>>): Promise<boolean> {
 		const existingUser = await this.getUser(user_id);
-		if (!existingUser) throw new Error("User not found");
+		if (!existingUser) return false;
 		const updatedUser = {
 			...existingUser,
 			...updates,
@@ -52,6 +52,7 @@ export class UserManager<A = any> {
 			},
 			updatedUser,
 		);
+		return true;
 	}
 
 	/**
@@ -68,10 +69,11 @@ export class UserManager<A = any> {
 	 * Adds a role to a user
 	 * @param user_id User _id
 	 * @param role_id Role _id
+	 * @returns Whether the update was successful
 	 */
-	async addRoleToUser(user_id: Id, role_id: Id): Promise<void> {
+	async addRoleToUser(user_id: Id, role_id: Id): Promise<boolean> {
 		const user = await this.getUser(user_id);
-		if (!user) throw new Error("User not found");
+		if (!user) return false;
 		if (!user.roles.includes(role_id)) {
 			user.roles.push(role_id);
 			await this.db.c(collections.users).update(
@@ -81,16 +83,18 @@ export class UserManager<A = any> {
 				user,
 			);
 		}
+		return true;
 	}
 
 	/**
 	 * Removes a role from a user
 	 * @param user_id User _id
 	 * @param role_id Role _id
+	 * @returns Whether the update was successful
 	 */
-	async removeRoleFromUser(user_id: Id, role_id: Id): Promise<void> {
+	async removeRoleFromUser(user_id: Id, role_id: Id): Promise<boolean> {
 		const user = await this.getUser(user_id);
-		if (!user) throw new Error("User not found");
+		if (!user) return false;
 		const index = user.roles.indexOf(role_id);
 		if (index !== -1) {
 			user.roles.splice(index, 1);
@@ -101,16 +105,21 @@ export class UserManager<A = any> {
 				user,
 			);
 		}
+		return true;
 	}
 
 	/**
 	 * Updates a user's attributes
 	 * @param user_id User _id
 	 * @param attributes New attributes to merge
+	 * @returns Whether the update was successful
 	 */
-	async updateAttributes(user_id: Id, attributes: Partial<A>): Promise<void> {
+	async updateAttributes(
+		user_id: Id,
+		attributes: Partial<A>,
+	): Promise<boolean> {
 		const user = await this.getUser(user_id);
-		if (!user) throw new Error("User not found");
+		if (!user) return false;
 		user.attrib = {
 			...user.attrib,
 			...attributes,
@@ -121,5 +130,6 @@ export class UserManager<A = any> {
 			},
 			user,
 		);
+		return true;
 	}
 }

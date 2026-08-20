@@ -5,13 +5,11 @@ import { collections } from "./const";
 export class WardenManager {
 	constructor(private db: ValtheraCompatible) {}
 
-	changeRoleNameToId(name: string): Promise<Id> {
-		return this.db
-			.c<Role>(collections.roles)
-			.findOne({
-				name,
-			})
-			.then(r => r._id);
+	async changeRoleNameToId(name: string): Promise<Id> {
+		const r = await this.db.c<Role>(collections.roles).findOne({
+			name,
+		});
+		return r?._id;
 	}
 
 	// ADD
