@@ -1,91 +1,74 @@
 import { Id, ValtheraCompatible } from "@wxn0brp/db-core";
-import { ABACRule, ACLRule, Role, RoleRule } from "./types/system";
-import { collections } from "./const";
+import { ABACManager } from "./mgr/abac";
+import { ACLManager } from "./mgr/acl";
+import { RBACManager } from "./mgr/rbac";
+import { RoleManager } from "./mgr/role";
+import { ABACRule, Role } from "./types/system";
 
 export class WardenManager {
-	constructor(private db: ValtheraCompatible) {}
+	readonly role: RoleManager;
+	readonly acl: ACLManager;
+	readonly rbac: RBACManager;
+	readonly abac: ABACManager;
 
-	async changeRoleNameToId(name: string): Promise<Id> {
-		const r = await this.db.c<Role>(collections.roles).findOne({
-			name,
-		});
-		return r?._id;
+	constructor(db: ValtheraCompatible) {
+		this.role = new RoleManager(db);
+		this.acl = new ACLManager(db);
+		this.rbac = new RBACManager(db);
+		this.abac = new ABACManager(db);
 	}
 
-	// ADD
-	addRole(role: Role | Omit<Role, "_id">): Promise<Role> {
-		return this.db.c<Role>(collections.roles).add(role);
+	/** @deprecated */
+	changeRoleNameToId(name: string) {
+		return this.role.findByName(name);
 	}
 
-	addACLRule(entityId: string, p: number, uid?: Id): Promise<ACLRule> {
-		const rule: ACLRule = {
-			p,
-		};
-		if (uid) rule.uid = uid;
-		return this.db
-			.c<ACLRule>(collections.acl + "/" + entityId)
-			.add(rule, false);
+	/** @deprecated */
+	roleExists(roleId: Id) {
+		return this.role.exists(roleId);
 	}
 
-	addRBACRule(
-		role_id: string,
-		entity_id: string,
-		p: number,
-	): Promise<RoleRule> {
-		return this.db.c<RoleRule>(collections.role + "/" + role_id).add(
-			{
-				_id: entity_id,
-				p,
-			},
-			false,
-		);
+	/** @deprecated */
+	addRole(role: Role | Omit<Role, "_id">) {
+		return this.role.add(role);
 	}
 
+	/** @deprecated */
+	removeRole(roleId: string) {
+		return this.role.remove(roleId);
+	}
+
+	/** @deprecated */
+	addACLRule(entityId: string, p: number, uid?: Id) {
+		return this.acl.add(entityId, p, uid);
+	}
+
+	/** @deprecated */
+	removeACLRule(entityId: string, uid?: string) {
+		return this.acl.remove(entityId, uid);
+	}
+
+	/** @deprecated */
+	addRBACRule(roleId: string, entityId: string, p: number) {
+		return this.rbac.add(roleId, entityId, p);
+	}
+
+	/** @deprecated */
+	removeRBACRule(roleId: string, entityId: string) {
+		return this.rbac.remove(roleId, entityId);
+	}
+
+	/** @deprecated */
 	addABACRule(
-		entity_id: string,
+		entityId: string,
 		flag: number,
 		condition: ABACRule["condition"],
-	): Promise<ABACRule> {
-		return this.db.c<ABACRule>(collections.abac + "/" + entity_id).add(
-			{
-				flag,
-				condition,
-			},
-			true,
-		);
+	) {
+		return this.abac.add(entityId, flag, condition);
 	}
 
-	// DELETE
-	removeRole(roleId: string): Promise<Role | null> {
-		return this.db.c<Role>(collections.roles).removeOne({
-			_id: roleId,
-		});
-	}
-
-	removeACLRule(entityId: string, uid?: string): Promise<ACLRule | null> {
-		const q: any = uid
-			? {
-					uid,
-				}
-			: {
-					$not: {
-						$exists: {
-							uid: true,
-						},
-					},
-				};
-		return this.db.c<ACLRule>(collections.acl + "/" + entityId).removeOne(q);
-	}
-
-	removeRBACRule(roleId: string, entityId: string): Promise<RoleRule | null> {
-		return this.db.c<RoleRule>(collections.role + "/" + roleId).removeOne({
-			_id: entityId,
-		});
-	}
-
-	removeABACRule(entityId: string, flag: number): Promise<ABACRule | null> {
-		return this.db.c<ABACRule>(collections.abac + "/" + entityId).removeOne({
-			flag,
-		});
+	/** @deprecated */
+	removeABACRule(entityId: string, flag: number) {
+		return this.abac.remove(entityId, flag);
 	}
 }
